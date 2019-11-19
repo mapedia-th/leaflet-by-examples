@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>QUERY PARCEL</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
+    <script src=" https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"> </script>
+    <style>
+        #map {
+            height: 660px;
+        }
+
+        .input-box {
+            height: auto;
+            margin: 0;
+            margin-right: -10%;
+            margin-left: -10%;
+            margin-top: 2%;
+            padding: 0;
+            background-color: #ffffff;
+        }
+
+        footer {
+            background-color: #555;
+            color: white;
+            padding: 15px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container-fluid">
+        <div class="col-md-3">
+            <div class="jumbotron input-box">
+                <h1>PARCEL <b>QUERY</b> </h1>
+                <form id="form_parcel">
+                    <fieldset>
+                        <legend>Please input information</legend>
+                        <div class="form-group">
+                            <label>Land ID</label>
+                            <input type="number" name="parcel_id" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label>Price (฿)</label>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <input type="text" name="price_1" class="form-control" value="0">
+                                </div>
+                                <div class="col-md-1">
+                                    to
+                                </div>
+                                <div class="col-md-5">
+                                    <input type="text" name="price_2" class="form-control" value="999999">
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <hr class="my-4">
+                    <p>Leaflet is the leading open-source JavaScript library for mobile-friendly interactive maps.</p>
+                    <p class="lead">
+                        <button class="btn btn-success btn-lg" type="submit" href="#" role="button">SEARCH</button>
+                    </p>
+                </form>
+            </div>
+        </div>
+        <div class="col-sm-9">
+            <div id="map"></div>
+        </div>
+    </div>
+
+
+    <footer class="container-fluid">
+        <p>Footer Text</p>
+    </footer>
+
+    <script>
+        var mymap = L.map('map').setView([16.738086, 100.209223], 16);
+        var BlackAndWhite = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+        }).addTo(mymap);
+
+        var google_map = L.tileLayer('https://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+            maxZoom: 18,
+            subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+        })
+
+        var Mapnik = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+        });
+
+        var WorldImagery = L.tileLayer(
+            'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                maxZoom: 18,
+            });
+
+
+        var village = L.tileLayer.wms("http://119.59.125.189/mapservice/gis/wms?", {
+            layers: 'gis:village',
+            format: 'image/png',
+            transparent: true
+        }).addTo(mymap)
+
+
+
+
+        function getColor(d) {
+            return d != null ? '#29a329' :
+                d == null ? '#262626' :
+                '#ffffe6';
+        }
+
+        function style(feature) {
+            return {
+                fillColor: getColor(feature.properties.house_id),
+                weight: 2,
+                opacity: 1,
+                color: 'white',
+                dashArray: '3',
+                fillOpacity: 0.9
+            };
+        }
+
+        function onEachFeature(f, l) {
+            var popupContent = '<form role="form" class="form" enctype="multipart/form-data"><fieldset>\
+                          <legend>อัพเดตข้อมูลรายแปลง</legend>\
+                          <div class="form-group">\
+                            <label for="exampleInputEmail1">เลขที่บ้าน</label>\
+                            <input type="text" class="form-control" name="house_id" readonly value="' + f.properties
+                .house_id + '">\
+                          </div>\
+                          <div class="form-group">\
+                            <label for="exampleInputPassword1">ชื่อ</label>\
+                            <input type="text" class="form-control" name="f_name" readonly value="' + f.properties
+                .f_name + '">\
+                          </div>\
+                          <div class="form-group">\
+                            <label for="exampleInputPassword1">นามสกุล</label>\
+                            <input type="text" class="form-control" name="l_name" readonly value="' + f.properties
+                .l_name + '">\
+                          </div>\
+                          <div class="form-group">\
+                            <label for="exampleInputPassword1">จำนวนสมาชิก</label>\
+                            <input type="text" class="form-control" name="member" readonly value="' + f.properties
+                .member + '">\
+                          </div>\
+                          <div class="form-group">\
+                            <label for="exampleInputPassword1">ราคาประเมินที่ดิน</label>\
+                            <input type="text" class="form-control" name="budget" readonly value="' + f.properties
+                .budget + '">\
+                          </div>\
+                        </fieldset> </form>';
+            l.bindPopup(popupContent);
+        }
+
+        var parcel = L.layerGroup().addTo(mymap);
+
+        $.getJSON("api/get_parcel", function (data) {
+            var geojson = L.geoJson(data, {
+                style: style,
+                onEachFeature: onEachFeature
+            })
+            geojson.addTo(parcel);
+        })
+
+        var baseLayers = {
+            "google_map": google_map,
+            "Mapnik": Mapnik,
+            "BlackAndWhite": BlackAndWhite,
+            "WorldImagery": WorldImagery
+        };
+        var overlays = {
+            "parcel": parcel,
+            "village": village
+        };
+
+        L.control.layers(baseLayers, overlays, {
+            collapsed: false,
+            position: 'bottomleft'
+        }).addTo(mymap);
+
+
+
+        $("#form_parcel").submit(function (event) {
+            event.preventDefault();
+            parcel.clearLayers();
+            var parcel_id = event.target.parcel_id.value
+            var price_1 = event.target.price_1.value
+            var price_2 = event.target.price_2.value
+            $.ajax({
+                url: '/api/search_parcel/',
+                method: 'POST',
+                data: ({
+                    parcel_id: parcel_id,
+                    price_1: price_1,
+                    price_2: price_2
+                }),
+                success: function (data) {
+                    console.log(data)
+                    var geojson = L.geoJson(data, {
+                        style: style,
+                        onEachFeature: onEachFeature
+                    })
+                    geojson.addTo(parcel);
+                },
+                error: function () {
+                    console.log('error  data!');
+                }
+            })
+        });
+    </script>
+</body>
+
+</html>
