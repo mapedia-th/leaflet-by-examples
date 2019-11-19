@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit&display=swap">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container mt">
+        <div class="row">
+            <div class="col-sm-6">
+                <div id="map"></div>
+            </div>
+            <div class="col-sm-6">
+                <div class="dcard">
+                    <h1 style="font-weight: bold">Building Survey</h1>
+                    <h4>ฟอร์มสำหรับสำรวจที่พักอาศัย</h4>
+                    <hr>
+                    <form id="fieldForm" method="post" action="/api/insert" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="place">ชื่อสถานที่</label>
+                            <input type="text" class="form-control" id="splace" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="type">ประเภท:</label>
+                            <select class="form-control" id="stype" required>
+                                <option value="อาคารพานิชย์">อาคารพานิชย์</option>
+                                <option value="บ้านเดี่ยว">บ้านเดี่ยว</option>
+                                <option value="สถานที่ราชการ">สถานที่ราชการ</option>
+                                <option value="อื่นๆ">อื่นๆ</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="desc">คำอธิบาย</label>
+                            <input type="text" class="form-control" id="sdesc" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="file" name="imagename" id="imagename">
+                        </div>
+                        <hr>
+                        <button type="submit" id="button" class="btn btn-success">ส่งข้อมูล</button>
+                        <button type="button" id="edit" onclick="editData()" class="btn btn-info">แก้ใขข้อมูล</button>
+                        <button type="button" id="refresh" onclick="refreshPage()"
+                            class="btn btn-outline-info">refresh</button>&nbsp; |
+                        <button type="button" id="remove" onclick="deleteData()" class="btn btn-danger">ลบ
+                            marker</button>
+                        <br><span id="status"></span>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.2.2/jquery.form.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+<script src="main.js"></script>
+
+</html>

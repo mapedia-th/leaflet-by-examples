@@ -1,0 +1,22 @@
+body{
+    font-family: 'Kanit', sans-serif;
+}
+
+#map{
+    height: 620px;
+    width: 100%;
+    border-radius: 10px;
+    background-color: rgb(240, 240, 240);
+}
+
+.mt{
+	margin-top: 2rem;
+}
+
+.dcard{
+    height: 620px;
+    padding: 1.5rem;;
+    border-radius: 10px;
+    background-color: rgb(240, 240, 240);
+}
+

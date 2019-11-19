@@ -1,0 +1,25 @@
+{
+  "name": "forestfire",
+  "version": "1.0.0",
+  "description": "forest fire app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "forest",
+    "fire",
+    "web",
+    "app"
+  ],
+  "author": "sakda homhuan",
+  "license": "ISC",
+  "dependencies": {
+    "@turf/turf": "^5.1.6",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "csvtojson": "^2.0.10",
+    "express": "^4.17.1",
+    "request": "^2.88.0"
+  }
+}
