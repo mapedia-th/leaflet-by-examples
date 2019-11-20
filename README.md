@@ -10,7 +10,13 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them
 
 ```
-Give examples
+1. VS Code
+2. Node.js
+3. PostgreSQL (psql)
+4. PostGIS
+5. Leaflet
+6. Bootstrap
+7. OpenstreetMap (OSM)
 ```
 
 ### Installing
@@ -20,13 +26,14 @@ A step by step series of examples that tell you how to get a development env run
 Say what the step will be
 
 ```
-Give the example
+> cd c:\ 
+> mkdir query && cd query
 ```
 
 And repeat
 
 ```
-until finished
+> npm init
 ```
 
 End with an example of getting some data out of the system or using it for a little demo
